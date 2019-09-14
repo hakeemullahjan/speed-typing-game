@@ -16,7 +16,7 @@ class MainScreen extends Component {
           </CardSection>
 
           <CardSection>
-            <Button>High Scores</Button>
+            <Button onPress={()=>this.props.navigation.navigate('Score')} >High Scores</Button>
           </CardSection>
         </View>
       </View>

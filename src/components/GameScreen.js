@@ -20,31 +20,52 @@ class GameScreen extends Component {
   }
 
   componentDidMount() {
-    const {levelCounter, word, words, wordCount} = this.state;
-    let wordTimer = setInterval(this.nextWord, levelCounter * 1000);
-    let tiktokT = setInterval(this.tiktok, 1000);
+    this.tiktok();
+    this.nextWord();
+    // let wordTimer = setInterval(this.nextWord, levelCounter * 1000);
+    // let tiktokT = setInterval(this.tiktok, 1000);
   }
 
   nextWord() {
-    const {words, wordCount, text} = this.state;
-    if (words[wordCount] === text) {
-      this.setState({correctWord: this.state.correctWord + 1});
-    }
-    //next question conditon
-    if (wordCount === 9) {
-      this.props.navigation.navigate('Result', {
-        correctWord: this.state.correctWord,
-      });
-    } else {
-      this.setState({wordCount: this.state.wordCount + 1, text: ''});
+    const {words, wordCount, text, levelCounter} = this.state;
+    let wordTimer = setInterval(() => {
+      if (this.state.words[this.state.wordCount] === this.state.text.toLowerCase()) {
+        this.setState({correctWord: this.state.correctWord + 1});
+      }
+      // next question conditon
+      if (this.state.wordCount >= 9) {
+        klear();
+
+        this.props.navigation.navigate('Result', {
+          correctWord: this.state.correctWord,
+        });
+      } else {
+        // alert('next qie')
+        this.setState({wordCount: this.state.wordCount + 1, text: ''});
+      }
+    }, levelCounter * 1000);
+
+    function klear() {
+      clearInterval(wordTimer);
     }
   }
 
   tiktok() {
-    if (this.state.tictoc === 1) {
-      this.setState({tictoc: this.state.levelCounter});
-    } else {
-      this.setState({tictoc: this.state.tictoc - 1});
+    const {words, wordCount, text} = this.state;
+    let tiktokT = setInterval(() => {
+      if (this.state.wordCount >= 9) {
+        klear();
+      } else {
+        if (this.state.tictoc === 1) {
+          this.setState({tictoc: this.state.levelCounter});
+        } else {
+          this.setState({tictoc: this.state.tictoc - 1});
+        }
+      }
+    }, 1000);
+
+    function klear() {
+      clearInterval(tiktokT);
     }
   }
 
